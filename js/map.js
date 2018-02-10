@@ -93,25 +93,27 @@ var fillData = function () {
 };
 
 var fragment = document.createDocumentFragment();
-var map = document.querySelector('.map__pins');
+var map = document.querySelector('.map');
+var mapPins = map.querySelector('.map__pins');
+var PIN_WIDTH = 62;
+var PIN_HEIGHT = 84;
+var START_PIN_HEIGHT = 62;
 
-var drawPin = function (mas) {
+var drawPins = function (mas) {
   for (var i = 0; i < mas.length; i++) {
     var newPin = document.createElement('button');
-    var EL_WIDTH = 50;
-    var EL_HEIGHT = 70;
-    var elX = mas[i].location.x - EL_WIDTH / 2;
-    var elY = mas[i].location.y - EL_HEIGHT;
+    var elX = mas[i].location.x - PIN_WIDTH / 2;
+    var elY = mas[i].location.y - PIN_HEIGHT;
     var elAva = mas[i].author.avatar;
 
-    newPin.className = 'map__pin';
+    newPin.className = 'map__pin map__pin--similar';
     newPin.setAttribute('style', 'left:' + elX + 'px; top:' + elY + 'px;');
     newPin.innerHTML = '<img src=' + elAva + ' width="40" height="40" draggable="false">';
 
     fragment.appendChild(newPin);
   }
 
-  map.appendChild(fragment);
+  mapPins.appendChild(fragment);
 };
 
 var fillDialog = function (index) {
@@ -149,10 +151,10 @@ var fillDialog = function (index) {
   var roomsVal;
 
   switch (offers[index].offer.guests) {
-    case 1 :
+    case 1:
       guestsVal = ' гостя';
       break;
-    default :
+    default:
       guestsVal = ' гостей';
   }
 
@@ -191,14 +193,244 @@ var fillDialog = function (index) {
 
   lodgeAva.setAttribute('src', offers[index].author.avatar);
 
-  map.insertAdjacentElement('afterend', template);
+  mapPins.insertAdjacentElement('afterend', template);
 };
 
 
+var nf = document.querySelector('.notice__form');
+var nfHeaderFieldset = nf.querySelector('.notice__header');
+var nfTitle = nf.elements.title;
+var nfAddress = nf.elements.address;
+var nfType = nf.elements.type;
+var nfPrice = nf.elements.price;
+var nfTimeIn = nf.elements.timein;
+var nfTimeOut = nf.elements.timeout;
+var nfRooms = nf.elements.room_number;
+var nfCapacity = nf.elements.capacity;
+var nfFeaturesFieldset = nf.querySelector('.features');
+var nfDescription = nf.elements.description;
+var nfPhotoFieldset = nf.querySelector('.form__photo-container');
+var nfSubmitFieldset = nf.querySelector('.form__element--submit');
+var nfSubmitBtn = nf.querySelector('.form__submit');
+var nfReset = nf.querySelector('.form__reset');
+
+var isPageActive = false;
+
+var resetPage = function () {
+  isPageActive = false;
+  nf.classList.add('notice__form--disabled');
+  nfHeaderFieldset.setAttribute('disabled', '');
+  nfTitle.setAttribute('disabled', '');
+  nfAddress.setAttribute('disabled', '');
+  nfType.setAttribute('disabled', '');
+  nfPrice.setAttribute('disabled', '');
+  nfTimeIn.setAttribute('disabled', '');
+  nfTimeOut.setAttribute('disabled', '');
+  nfRooms.setAttribute('disabled', '');
+  nfCapacity.setAttribute('disabled', '');
+  nfFeaturesFieldset.setAttribute('disabled', '');
+  nfDescription.setAttribute('disabled', '');
+  nfPhotoFieldset.setAttribute('disabled', '');
+  nfSubmitFieldset.setAttribute('disabled', '');
+  nf.reset();
+};
+
+resetPage();
+
+var pinMain = mapPins.querySelector('.map__pin--main');
 var offers = fillData();
 
-document.querySelector('.map').classList.remove('map--faded');
+var setPageActive = function () {
+  document.querySelector('.map').classList.remove('map--faded');
 
-drawPin(offers);
+  drawPins(offers);
+  fillDialog(0);
 
-fillDialog(0);
+  nf.classList.remove('notice__form--disabled');
+  nfHeaderFieldset.removeAttribute('disabled');
+  nfTitle.removeAttribute('disabled');
+  nfAddress.removeAttribute('disabled');
+  nfType.removeAttribute('disabled');
+  nfPrice.removeAttribute('disabled');
+  nfTimeIn.removeAttribute('disabled');
+  nfTimeOut.removeAttribute('disabled');
+  nfRooms.removeAttribute('disabled');
+  nfCapacity.removeAttribute('disabled');
+  nfFeaturesFieldset.removeAttribute('disabled');
+  nfDescription.removeAttribute('disabled');
+  nfPhotoFieldset.removeAttribute('disabled');
+  nfSubmitFieldset.removeAttribute('disabled');
+
+  isPageActive = true;
+};
+
+
+var setFormAddress = function (el) {
+  var x;
+  var y;
+
+  if (isPageActive) {
+    x = el.offsetLeft + PIN_WIDTH / 2;
+    y = el.offsetTop + PIN_HEIGHT;
+  } else {
+    x = el.offsetLeft + PIN_WIDTH / 2;
+    y = el.offsetTop + START_PIN_HEIGHT / 2;
+  }
+
+  nfAddress.value = x + ', ' + y;
+};
+
+setFormAddress(pinMain);
+
+var onPinMainDrag = function () {
+  setPageActive();
+  setFormAddress(pinMain);
+  // pinMain.removeEventListener('mouseup', onPinMainDrag);
+};
+
+pinMain.addEventListener('mouseup', onPinMainDrag);
+
+var clickedEl = null;
+// var pin = mapPins.querySelectorAll('.map__pin--similar');
+
+
+// var onPinClick = function (evt) {
+
+//   if (isPageActive) {
+
+//     clickedEl = evt.currentTarget;
+//     var pinIndex = clickedEl.dataset.index;
+//     fillDialog(pinIndex);
+
+//   }
+
+
+// };
+
+
+// for (var p = 0; p < pin.length; p++) {
+//   pin[p].addEventListener('click', onPinClick);
+// }
+
+
+
+// VALIDATION
+
+
+var removePins = function (mas) {
+  var pin = mapPins.querySelectorAll('.map__pin--similar');
+
+  for (var i = 0; i < mas.length; i++) {
+    mapPins.removeChild(pin[i]);
+  }
+};
+
+var removeCard = function () {
+  var card = map.querySelector('.map__card');
+  var template = document.querySelector('template');
+
+  template.appendChild(card);
+  // template.content.addEventListener('afterbegin', card);
+}
+
+
+nfReset.addEventListener('click', function () {
+  map.classList.add('map--faded');
+  resetPage();
+  setFormAddress(pinMain);
+  removePins(offers);
+  // removeCard();
+});
+
+
+var minPrice = [0, 1000, 5000, 10000];
+var roomsGuests = {
+  '1': ['1'],
+  '2': ['1', '2'],
+  '3': ['1', '2', '3'],
+  '100': ['0']
+};
+
+var getTimeOut = function () {
+  var timeSelIndex = nfTimeIn.selectedIndex;
+  nfTimeOut.selectedIndex = timeSelIndex;
+};
+
+nfTimeIn.onchange = getTimeOut;
+
+var getMinPrice = function () {
+  var typeSelIndex = nfType.selectedIndex;
+  nfPrice.setAttribute('min', minPrice[typeSelIndex]);
+  nfPrice.setAttribute('placeholder', minPrice[typeSelIndex]);
+};
+
+
+nfType.onchange = getMinPrice;
+
+var getGuestsNumber = function () {
+  for (var key in roomsGuests) {
+    if (nfRooms.value === key) {
+      nfCapacity.value = roomsGuests[key][0];
+    }
+  }
+};
+
+var getRoomsNumber = function () {
+  for (var key in roomsGuests) {
+    if (roomsGuests[key].indexOf(nfCapacity.value) > -1) {
+      nfRooms.value = key;
+    }
+  }
+};
+
+nfRooms.onchange = getGuestsNumber;
+nfCapacity.onchange = getRoomsNumber;
+
+var setInvalidBorder = function (el) {
+  el.setAttribute('style', 'border: 2px solid red;');
+};
+
+var setNormalBorder = function (el) {
+  el.setAttribute('style', 'border: 1px solid #d9d9d3;');
+};
+
+var setTitleValidation = function () {
+
+  if (nfTitle.validity.valueMissing) {
+    nfTitle.setCustomValidity('Не забудьте ввести название!');
+    setInvalidBorder(nfTitle);
+  } else if (nfTitle.validity.tooShort) {
+    nfTitle.setCustomValidity('Слишком короткое название, наберите хотя бы 30 символов!');
+    setInvalidBorder(nfTitle);
+  } else if (nfTitle.validity.tooLong) {
+    nfTitle.setCustomValidity('Ну Вы размахнулись! Давайте сократим до 100 символов :)');
+    setInvalidBorder(nfTitle);
+  } else {
+    nfTitle.setCustomValidity('');
+    setNormalBorder(nfTitle);
+  }
+
+};
+
+var setPriceValidation = function () {
+
+  if (nfPrice.validity.valueMissing) {
+    nfPrice.setCustomValidity('Не забудьте ввести цену!');
+    setInvalidBorder(nfPrice);
+  } else if (nfPrice.validity.tooShort) {
+    nfPrice.setCustomValidity('Для этого типа жилья цена должна быть больше ');
+    setInvalidBorder(nfPrice);
+  } else if (nfPrice.validity.tooLong) {
+    nfPrice.setCustomValidity('Ну Вы размахнулись! Максимальная цена - всего лишь млн :)');
+    setInvalidBorder(nfPrice);
+  } else {
+    nfPrice.setCustomValidity('');
+    setNormalBorder(nfPrice);
+  }
+
+};
+
+nfSubmitBtn.addEventListener('click', function () {
+  nfTitle.addEventListener('invalid', setTitleValidation());
+  nfPrice.addEventListener('invalid', setPriceValidation());
+});
