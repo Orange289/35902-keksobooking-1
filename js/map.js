@@ -277,17 +277,19 @@ var onPinClick = function (evt) {
     clickedElement = evt.target;
   } else if (evt.target.parentElement.classList.contains('map__pin--similar')) {
     clickedElement = evt.target.parentElement;
+  } else {
+    return;
   }
 
+  var oldMapCard = map.querySelector('.map__card');
+  map.removeChild(oldMapCard);
   fillDialog(clickedElement.dataset.index);
-};
 
+};
 
 mapPins.addEventListener('click', onPinClick);
 
-
 // VALIDATION
-
 
 var removePins = function (mas) {
   var pin = mapPins.querySelectorAll('.map__pin--similar');
@@ -296,13 +298,6 @@ var removePins = function (mas) {
     mapPins.removeChild(pin[i]);
   }
 };
-
-// var removeCard = function () {
-//   var card = map.querySelector('.map__card');
-
-
-// }
-
 
 nfReset.addEventListener('click', function () {
   map.classList.add('map--faded');
@@ -340,13 +335,20 @@ var getMinPrice = function () {
   nfPrice.setAttribute('placeholder', minPrice[typeSelIndex]);
 };
 
-
 nfType.onchange = getMinPrice;
 
 var getGuestsNumber = function () {
   for (var key in roomsGuests) {
     if (nfRooms.value === key) {
       nfCapacity.value = roomsGuests[key][0];
+
+      for (var i = 0; i < nfCapacity.options.length; i++) {
+        nfCapacity.options[i].removeAttribute('disabled');
+        if (roomsGuests[key].indexOf(nfCapacity.options[i].value) === -1) {
+          nfCapacity.options[i].setAttribute('disabled', '');
+        }
+      }
+
     }
   }
 };
