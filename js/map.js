@@ -108,6 +108,7 @@ var drawPins = function (mas) {
 
     newPin.className = 'map__pin map__pin--similar';
     newPin.setAttribute('style', 'left:' + elX + 'px; top:' + elY + 'px;');
+    newPin.setAttribute('data-index', i);
     newPin.innerHTML = '<img src=' + elAva + ' width="40" height="40" draggable="false">';
 
     fragment.appendChild(newPin);
@@ -117,7 +118,7 @@ var drawPins = function (mas) {
 };
 
 var fillDialog = function (index) {
-  var template = document.querySelector('template').content.querySelector('.map__card');
+  var template = document.querySelector('template').content.querySelector('.map__card').cloneNode(true);
 
   var lodgeAva = template.querySelector('.popup__avatar');
   var lodgeTitle = template.querySelector('h3');
@@ -198,7 +199,7 @@ var fillDialog = function (index) {
 
 
 var nf = document.querySelector('.notice__form');
-var nfHeaderFieldset = nf.querySelector('.notice__header');
+var nfFieldset = document.querySelectorAll('fieldset');
 var nfTitle = nf.elements.title;
 var nfAddress = nf.elements.address;
 var nfType = nf.elements.type;
@@ -207,10 +208,6 @@ var nfTimeIn = nf.elements.timein;
 var nfTimeOut = nf.elements.timeout;
 var nfRooms = nf.elements.room_number;
 var nfCapacity = nf.elements.capacity;
-var nfFeaturesFieldset = nf.querySelector('.features');
-var nfDescription = nf.elements.description;
-var nfPhotoFieldset = nf.querySelector('.form__photo-container');
-var nfSubmitFieldset = nf.querySelector('.form__element--submit');
 var nfSubmitBtn = nf.querySelector('.form__submit');
 var nfReset = nf.querySelector('.form__reset');
 
@@ -219,19 +216,11 @@ var isPageActive = false;
 var resetPage = function () {
   isPageActive = false;
   nf.classList.add('notice__form--disabled');
-  nfHeaderFieldset.setAttribute('disabled', '');
-  nfTitle.setAttribute('disabled', '');
-  nfAddress.setAttribute('disabled', '');
-  nfType.setAttribute('disabled', '');
-  nfPrice.setAttribute('disabled', '');
-  nfTimeIn.setAttribute('disabled', '');
-  nfTimeOut.setAttribute('disabled', '');
-  nfRooms.setAttribute('disabled', '');
-  nfCapacity.setAttribute('disabled', '');
-  nfFeaturesFieldset.setAttribute('disabled', '');
-  nfDescription.setAttribute('disabled', '');
-  nfPhotoFieldset.setAttribute('disabled', '');
-  nfSubmitFieldset.setAttribute('disabled', '');
+
+  for (var i = 0; i < nfFieldset.length; i++) {
+    nfFieldset[i].setAttribute('disabled', '');
+  }
+
   nf.reset();
 };
 
@@ -247,19 +236,10 @@ var setPageActive = function () {
   fillDialog(0);
 
   nf.classList.remove('notice__form--disabled');
-  nfHeaderFieldset.removeAttribute('disabled');
-  nfTitle.removeAttribute('disabled');
-  nfAddress.removeAttribute('disabled');
-  nfType.removeAttribute('disabled');
-  nfPrice.removeAttribute('disabled');
-  nfTimeIn.removeAttribute('disabled');
-  nfTimeOut.removeAttribute('disabled');
-  nfRooms.removeAttribute('disabled');
-  nfCapacity.removeAttribute('disabled');
-  nfFeaturesFieldset.removeAttribute('disabled');
-  nfDescription.removeAttribute('disabled');
-  nfPhotoFieldset.removeAttribute('disabled');
-  nfSubmitFieldset.removeAttribute('disabled');
+
+  for (var i = 0; i < nfFieldset.length; i++) {
+    nfFieldset[i].removeAttribute('disabled');
+  }
 
   isPageActive = true;
 };
@@ -285,33 +265,25 @@ setFormAddress(pinMain);
 var onPinMainDrag = function () {
   setPageActive();
   setFormAddress(pinMain);
-  // pinMain.removeEventListener('mouseup', onPinMainDrag);
 };
 
 pinMain.addEventListener('mouseup', onPinMainDrag);
 
-var clickedEl = null;
-// var pin = mapPins.querySelectorAll('.map__pin--similar');
+var clickedElement = null;
+
+var onPinClick = function (evt) {
+
+  if (evt.target.classList.contains('map__pin--similar')) {
+    clickedElement = evt.target;
+  } else if (evt.target.parentElement.classList.contains('map__pin--similar')) {
+    clickedElement = evt.target.parentElement;
+  }
+
+  fillDialog(clickedElement.dataset.index);
+};
 
 
-// var onPinClick = function (evt) {
-
-//   if (isPageActive) {
-
-//     clickedEl = evt.currentTarget;
-//     var pinIndex = clickedEl.dataset.index;
-//     fillDialog(pinIndex);
-
-//   }
-
-
-// };
-
-
-// for (var p = 0; p < pin.length; p++) {
-//   pin[p].addEventListener('click', onPinClick);
-// }
-
+mapPins.addEventListener('click', onPinClick);
 
 
 // VALIDATION
@@ -325,13 +297,11 @@ var removePins = function (mas) {
   }
 };
 
-var removeCard = function () {
-  var card = map.querySelector('.map__card');
-  var template = document.querySelector('template');
+// var removeCard = function () {
+//   var card = map.querySelector('.map__card');
 
-  template.appendChild(card);
-  // template.content.addEventListener('afterbegin', card);
-}
+
+// }
 
 
 nfReset.addEventListener('click', function () {
@@ -339,7 +309,7 @@ nfReset.addEventListener('click', function () {
   resetPage();
   setFormAddress(pinMain);
   removePins(offers);
-  // removeCard();
+  map.querySelector('.map__card').remove();
 });
 
 
@@ -356,7 +326,13 @@ var getTimeOut = function () {
   nfTimeOut.selectedIndex = timeSelIndex;
 };
 
+var getTimeIn = function () {
+  var timeSelIndex = nfTimeOut.selectedIndex;
+  nfTimeIn.selectedIndex = timeSelIndex;
+};
+
 nfTimeIn.onchange = getTimeOut;
+nfTimeOut.onchange = getTimeIn;
 
 var getMinPrice = function () {
   var typeSelIndex = nfType.selectedIndex;
@@ -418,7 +394,7 @@ var setPriceValidation = function () {
     nfPrice.setCustomValidity('Не забудьте ввести цену!');
     setInvalidBorder(nfPrice);
   } else if (nfPrice.validity.tooShort) {
-    nfPrice.setCustomValidity('Для этого типа жилья цена должна быть больше ');
+    nfPrice.setCustomValidity('Для этого типа жилья цена должна быть больше');
     setInvalidBorder(nfPrice);
   } else if (nfPrice.validity.tooLong) {
     nfPrice.setCustomValidity('Ну Вы размахнулись! Максимальная цена - всего лишь млн :)');
