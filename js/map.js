@@ -138,13 +138,13 @@ var fillDialog = function (index) {
 
 
   switch (offers[index].offer.type) {
-    case 'flat' :
+    case 'flat':
       lodgeType.textContent = 'Квартира';
       break;
-    case 'bungalo' :
+    case 'bungalo':
       lodgeType.textContent = 'Бунгало';
       break;
-    default :
+    default:
       lodgeType.textContent = 'Дом';
   }
 
@@ -266,13 +266,13 @@ var onPinMainMouseup = function () {
   setPageActive();
   setFormAddress(pinMain);
   pinMain.removeEventListener('mouseup', onPinMainMouseup);
+  document.addEventListener('keydown', onEscPress);
 };
 
 pinMain.addEventListener('mouseup', onPinMainMouseup);
 
-var clickedElement = null;
-
 var onPinClick = function (evt) {
+  var clickedElement = null;
 
   if (evt.target.classList.contains('map__pin--similar')) {
     clickedElement = evt.target;
@@ -283,9 +283,12 @@ var onPinClick = function (evt) {
   }
 
   var oldMapCard = map.querySelector('.map__card');
-  map.removeChild(oldMapCard);
+  if (oldMapCard) {
+    map.removeChild(oldMapCard);
+  }
   fillDialog(clickedElement.dataset.index);
 
+  document.addEventListener('keydown', onEscPress);
 };
 
 mapPins.addEventListener('click', onPinClick);
@@ -413,3 +416,41 @@ nfSubmitBtn.addEventListener('click', function () {
   nfTitle.addEventListener('invalid', setTitleValidation());
   nfPrice.addEventListener('invalid', setPriceValidation());
 });
+
+// close dialog
+
+var KEY_ENTER = 13;
+var KEY_ESC = 27;
+
+var closeDialog = function () {
+  var dialog = map.querySelector('.map__card');
+
+  map.removeChild(dialog);
+  document.removeEventListener('keydown', onEscPress);
+};
+
+var closeDialogOnClick = function (evt) {
+
+  if ((evt.target.className === 'popup__close') || (evt.target.children.className === 'popup__close')) {
+    closeDialog();
+  }
+
+};
+
+map.addEventListener('click', closeDialogOnClick);
+
+var onEscPress = function (evt) {
+  if (evt.keyCode === KEY_ESC) {
+    closeDialog();
+  }
+};
+
+map.addEventListener('keydown', function (evt) {
+  var dialog = map.querySelector('.map__card');
+
+  if (evt.keykode === KEY_ENTER) {
+    map.removeChild(dialog);
+    document.removeEventListener('keydown', onEscPress);
+  }
+});
+
