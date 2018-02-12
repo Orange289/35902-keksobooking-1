@@ -138,13 +138,13 @@ var fillDialog = function (index) {
 
 
   switch (offers[index].offer.type) {
-    case 'flat' :
+    case 'flat':
       lodgeType.textContent = 'Квартира';
       break;
-    case 'bungalo' :
+    case 'bungalo':
       lodgeType.textContent = 'Бунгало';
       break;
-    default :
+    default:
       lodgeType.textContent = 'Дом';
   }
 
