@@ -304,11 +304,15 @@ var removePins = function (mas) {
 };
 
 nfReset.addEventListener('click', function () {
+  var dialog = map.querySelector('.map__card');
   map.classList.add('map--faded');
   resetPage();
   setFormAddress(pinMain);
   removePins(offers);
-  map.querySelector('.map__card').remove();
+
+  if (dialog) {
+    dialog.remove();
+  }
   pinMain.addEventListener('mouseup', onPinMainMouseup);
 });
 
