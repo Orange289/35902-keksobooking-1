@@ -262,12 +262,13 @@ var setFormAddress = function (el) {
 
 setFormAddress(pinMain);
 
-var onPinMainDrag = function () {
+var onPinMainMouseup = function () {
   setPageActive();
   setFormAddress(pinMain);
+  pinMain.removeEventListener('mouseup', onPinMainMouseup);
 };
 
-pinMain.addEventListener('mouseup', onPinMainDrag);
+pinMain.addEventListener('mouseup', onPinMainMouseup);
 
 var clickedElement = null;
 
@@ -305,8 +306,8 @@ nfReset.addEventListener('click', function () {
   setFormAddress(pinMain);
   removePins(offers);
   map.querySelector('.map__card').remove();
+  pinMain.addEventListener('mouseup', onPinMainMouseup);
 });
-
 
 var minPrice = [0, 1000, 5000, 10000];
 var roomsGuests = {
