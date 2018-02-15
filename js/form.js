@@ -22,7 +22,7 @@
     var dialog = window.util.map.querySelector('.map__card');
     window.util.map.classList.add('map--faded');
     window.resetPage();
-    setFormAddress(window.pinMain);
+    window.setFormAddress(window.pinMain);
     window.removePins(window.offers);
 
     if (dialog) {
