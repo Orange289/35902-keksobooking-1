@@ -21,17 +21,17 @@
   window.setFormAddress(window.pinMain);
 
   window.pinMain.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
-
     var startCoords = {
       x: evt.clientX,
       y: evt.clientY
     };
 
     var onPinMainMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
+      var MAP_START_X = window.util.map.offsetLeft + window.PIN_WIDTH / 2;
+      var MAP_END_X = window.util.map.offsetLeft + window.util.map.clientWidth - window.PIN_WIDTH / 2;
+      var MAP_START_Y = 150 - window.PIN_HEIGHT;
+      var MAP_END_Y = 500 - window.PIN_HEIGHT;
 
-      window.setPageActive();
       window.setFormAddress(window.pinMain);
 
       var shift = {
@@ -44,14 +44,22 @@
         y: moveEvt.clientY
       };
 
-      window.pinMain.style.top = (window.pinMain.offsetTop - shift.y) + 'px';
-      window.pinMain.style.left = (window.pinMain.offsetLeft - shift.x) + 'px';
+      if ((moveEvt.clientX >= MAP_START_X)
+        && (moveEvt.clientX <= MAP_END_X)
+        && (moveEvt.clientY >= MAP_START_Y)
+        && (moveEvt.clientY <= MAP_END_Y)) {
+        window.pinMain.style.top = (window.pinMain.offsetTop - shift.y) + 'px';
+        window.pinMain.style.left = (window.pinMain.offsetLeft - shift.x) + 'px';
+      }
+
     };
 
-    var onPinMainMouseUp = function (upEvt) {
-      upEvt.preventDefault();
+    var onPinMainMouseUp = function () {
 
-      window.setPageActive();
+      if (window.isPageActive === false) {
+        window.setPageActive();
+      }
+
       window.setFormAddress(window.pinMain);
       document.removeEventListener('mousemove', onPinMainMouseMove);
       document.removeEventListener('mouseup', onPinMainMouseUp);

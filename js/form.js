@@ -4,7 +4,7 @@
   window.nf = document.querySelector('.notice__form');
 
   window.nfAddress = window.nf.elements.address;
-  window.nfFieldset = document.querySelectorAll('fieldset');
+  window.nfFieldset = window.nf.querySelectorAll('fieldset');
   var nfTitle = window.nf.elements.title;
   var nfType = window.nf.elements.type;
   var nfPrice = window.nf.elements.price;

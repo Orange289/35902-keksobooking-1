@@ -4,7 +4,6 @@
   window.PIN_WIDTH = 62;
   window.PIN_HEIGHT = 84;
   window.START_PIN_HEIGHT = 62;
-  window.util.mapPins = window.util.map.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
 
   window.drawPins = function (mas) {
