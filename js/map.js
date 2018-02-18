@@ -20,14 +20,48 @@
 
   window.setFormAddress(window.pinMain);
 
-  var onPinMainMouseup = function () {
-    window.setPageActive();
-    window.setFormAddress(window.pinMain);
-    window.pinMain.removeEventListener('mouseup', window.onPinMainMouseup);
-    document.addEventListener('keydown', onEscPress);
-  };
+  window.pinMain.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
 
-  window.pinMain.addEventListener('mouseup', onPinMainMouseup);
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+
+    var onPinMainMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      window.setPageActive();
+      window.setFormAddress(window.pinMain);
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      window.pinMain.style.top = (window.pinMain.offsetTop - shift.y) + 'px';
+      window.pinMain.style.left = (window.pinMain.offsetLeft - shift.x) + 'px';
+    };
+
+    var onPinMainMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      window.setPageActive();
+      window.setFormAddress(window.pinMain);
+      document.removeEventListener('mousemove', onPinMainMouseMove);
+      document.removeEventListener('mouseup', onPinMainMouseUp);
+      document.addEventListener('keydown', onEscPress);
+    };
+
+    document.addEventListener('mousemove', onPinMainMouseMove);
+    document.addEventListener('mouseup', onPinMainMouseUp);
+
+  });
 
   var onPinClick = function (evt) {
     var clickedElement = null;
