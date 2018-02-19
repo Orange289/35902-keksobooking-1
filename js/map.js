@@ -39,15 +39,16 @@
         y: startCoords.y - moveEvt.clientY
       };
 
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
-
       if ((moveEvt.clientX >= MAP_START_X)
         && (moveEvt.clientX <= MAP_END_X)
         && (moveEvt.clientY >= MAP_START_Y)
         && (moveEvt.clientY <= MAP_END_Y)) {
+
+        startCoords = {
+          x: moveEvt.clientX,
+          y: moveEvt.clientY
+        };
+
         window.pinMain.style.top = (window.pinMain.offsetTop - shift.y) + 'px';
         window.pinMain.style.left = (window.pinMain.offsetLeft - shift.x) + 'px';
       }
