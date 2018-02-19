@@ -20,14 +20,57 @@
 
   window.setFormAddress(window.pinMain);
 
-  var onPinMainMouseup = function () {
-    window.setPageActive();
-    window.setFormAddress(window.pinMain);
-    window.pinMain.removeEventListener('mouseup', window.onPinMainMouseup);
-    document.addEventListener('keydown', onEscPress);
-  };
+  window.pinMain.addEventListener('mousedown', function (evt) {
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
 
-  window.pinMain.addEventListener('mouseup', onPinMainMouseup);
+    var onPinMainMouseMove = function (moveEvt) {
+      var MAP_START_X = window.util.map.offsetLeft + window.PIN_WIDTH / 2;
+      var MAP_END_X = window.util.map.offsetLeft + window.util.map.clientWidth - window.PIN_WIDTH / 2;
+      var MAP_START_Y = 150 - window.PIN_HEIGHT;
+      var MAP_END_Y = 500 - window.PIN_HEIGHT;
+
+      window.setFormAddress(window.pinMain);
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      if ((moveEvt.clientX >= MAP_START_X)
+        && (moveEvt.clientX <= MAP_END_X)
+        && (moveEvt.clientY >= MAP_START_Y)
+        && (moveEvt.clientY <= MAP_END_Y)) {
+
+        startCoords = {
+          x: moveEvt.clientX,
+          y: moveEvt.clientY
+        };
+
+        window.pinMain.style.top = (window.pinMain.offsetTop - shift.y) + 'px';
+        window.pinMain.style.left = (window.pinMain.offsetLeft - shift.x) + 'px';
+      }
+
+    };
+
+    var onPinMainMouseUp = function () {
+
+      if (window.isPageActive === false) {
+        window.setPageActive();
+      }
+
+      window.setFormAddress(window.pinMain);
+      document.removeEventListener('mousemove', onPinMainMouseMove);
+      document.removeEventListener('mouseup', onPinMainMouseUp);
+      document.addEventListener('keydown', onEscPress);
+    };
+
+    document.addEventListener('mousemove', onPinMainMouseMove);
+    document.addEventListener('mouseup', onPinMainMouseUp);
+
+  });
 
   var onPinClick = function (evt) {
     var clickedElement = null;
