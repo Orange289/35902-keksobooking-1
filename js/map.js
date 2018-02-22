@@ -22,8 +22,8 @@
 
   window.pinMain.addEventListener('mousedown', function (evt) {
     var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
+      x: evt.pageX,
+      y: evt.pageY
     };
 
     var onPinMainMouseMove = function (moveEvt) {
@@ -35,18 +35,18 @@
       window.setFormAddress(window.pinMain);
 
       var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
+        x: startCoords.x - moveEvt.pageX,
+        y: startCoords.y - moveEvt.pageY
       };
 
-      if ((moveEvt.clientX >= MAP_START_X)
-        && (moveEvt.clientX <= MAP_END_X)
-        && (moveEvt.clientY >= MAP_START_Y)
-        && (moveEvt.clientY <= MAP_END_Y)) {
+      if ((moveEvt.pageX >= MAP_START_X)
+        && (moveEvt.pageX <= MAP_END_X)
+        && (moveEvt.pageY >= MAP_START_Y)
+        && (moveEvt.pageY <= MAP_END_Y)) {
 
         startCoords = {
-          x: moveEvt.clientX,
-          y: moveEvt.clientY
+          x: moveEvt.pageX,
+          y: moveEvt.pageY
         };
 
         window.pinMain.style.top = (window.pinMain.offsetTop - shift.y) + 'px';

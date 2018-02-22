@@ -128,9 +128,18 @@
 
   };
 
-  nfSubmitBtn.addEventListener('click', function () {
+  var successHandler = function () {
+    window.nf.reset();
+  };
+
+  var onSubmitClick = function (evt) {
     nfTitle.addEventListener('invalid', setTitleValidation());
     nfPrice.addEventListener('invalid', setPriceValidation());
-  });
+
+    window.backend.upload(new FormData(window.nf), successHandler, window.backend.onError);
+    evt.preventDefault();
+  };
+
+  nfSubmitBtn.addEventListener('click', onSubmitClick);
 
 })();
