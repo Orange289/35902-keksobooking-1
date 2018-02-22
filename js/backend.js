@@ -36,11 +36,11 @@
       error('Произошла ошибка соединения');
     });
 
-    xhr.timeout = 0;
-
     xhr.addEventListener('timeout', function () {
-      error('Запрос не успел выполниться за' + xhr.timeout + 'мс');
+      error('Запрос не успел выполниться за ' + xhr.timeout + ' мс');
     });
+
+    xhr.timeout = 1000;
 
     xhr.send(data);
 
@@ -53,7 +53,7 @@
     },
 
     upload: function (data, onLoad, onError) {
-      requestFunction('GET', URL, data, onLoad, onError);
+      requestFunction('POST', URL, data, onLoad, onError);
     },
 
     onError: function (errorMessage) {
