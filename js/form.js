@@ -1,33 +1,28 @@
 'use strict';
 
 (function () {
-  window.nf = document.querySelector('.notice__form');
-
-  window.nfAddress = window.nf.elements.address;
-  window.nfFieldset = window.nf.querySelectorAll('fieldset');
-  var nfTitle = window.nf.elements.title;
-  var nfType = window.nf.elements.type;
-  var nfPrice = window.nf.elements.price;
-  var nfTimeIn = window.nf.elements.timein;
-  var nfTimeOut = window.nf.elements.timeout;
-  var nfRooms = window.nf.elements.room_number;
-  var nfCapacity = window.nf.elements.capacity;
-  var nfSubmitBtn = window.nf.querySelector('.form__submit');
-  var nfReset = window.nf.querySelector('.form__reset');
+  window.nfAddress = window.util.nf.elements.address;
+  window.nfFieldset = window.util.nf.querySelectorAll('fieldset');
+  var nfTitle = window.util.nf.elements.title;
+  var nfType = window.util.nf.elements.type;
+  var nfPrice = window.util.nf.elements.price;
+  var nfTimeIn = window.util.nf.elements.timein;
+  var nfTimeOut = window.util.nf.elements.timeout;
+  var nfRooms = window.util.nf.elements.room_number;
+  var nfCapacity = window.util.nf.elements.capacity;
+  var nfSubmitBtn = window.util.nf.querySelector('.form__submit');
+  var nfReset = window.util.nf.querySelector('.form__reset');
 
   // VALIDATION
 
 
   nfReset.addEventListener('click', function () {
-    var dialog = window.util.map.querySelector('.map__card');
     window.util.map.classList.add('map--faded');
     window.resetPage();
     window.setFormAddress(window.pinMain);
-    window.removePins(window.offers);
+    window.removePins();
+    window.removeDialog();
 
-    if (dialog) {
-      dialog.remove();
-    }
     window.pinMain.addEventListener('mouseup', window.onPinMainMouseup);
   });
 
@@ -129,7 +124,7 @@
   };
 
   var successHandler = function () {
-    window.nf.reset();
+    window.util.nf.reset();
   };
 
   var onSubmitClick = function (evt) {

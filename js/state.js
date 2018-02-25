@@ -6,13 +6,15 @@
 
   window.resetPage = function () {
     window.isPageActive = false;
-    window.nf.classList.add('notice__form--disabled');
+    window.util.nf.classList.add('notice__form--disabled');
+    window.isFiltered = false;
 
     for (var i = 0; i < window.nfFieldset.length; i++) {
       window.nfFieldset[i].setAttribute('disabled', '');
     }
 
-    window.nf.reset();
+    window.util.nf.reset();
+    window.util.mapFilters.reset();
   };
 
   window.resetPage();
@@ -21,9 +23,9 @@
     document.querySelector('.map').classList.remove('map--faded');
 
     window.drawPins(window.offers);
-    window.fillDialog(0);
+    window.fillDialog(window.offers, 0);
 
-    window.nf.classList.remove('notice__form--disabled');
+    window.util.nf.classList.remove('notice__form--disabled');
 
     for (var i = 0; i < window.nfFieldset.length; i++) {
       window.nfFieldset[i].removeAttribute('disabled');

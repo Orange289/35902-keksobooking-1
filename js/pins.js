@@ -6,7 +6,20 @@
   window.START_PIN_HEIGHT = 62;
   var fragment = document.createDocumentFragment();
 
+  window.removePins = function () {
+    var pin = window.util.mapPins.querySelectorAll('.map__pin--similar');
+    var pinLength = pin.length;
+
+    for (var i = 0; i < pinLength; i++) {
+      window.util.mapPins.removeChild(pin[i]);
+    }
+  };
+
   window.drawPins = function (mas) {
+    window.removePins();
+
+    mas = mas.slice(0, 5);
+
     for (var i = 0; i < mas.length; i++) {
       var newPin = document.createElement('button');
       var elX = mas[i].location.x - window.PIN_WIDTH / 2;
@@ -23,46 +36,5 @@
 
     window.util.mapPins.appendChild(fragment);
   };
-
-  window.removePins = function (mas) {
-    var pin = window.util.mapPins.querySelectorAll('.map__pin--similar');
-
-    for (var i = 0; i < mas.length; i++) {
-      window.util.mapPins.removeChild(pin[i]);
-    }
-  };
-
-
-  ////
-
-  var mapFilters = window.util.map.querySelector('.map__filters');
-  var filterSelects = mapFilters.querySelectorAll('select');
-  var typeFilter = mapFilters.querySelector('#housing-type');
-  var priceFilter = mapFilters.querySelector('#housing-price');
-  var roomsFilter = mapFilters.querySelector('#housing-rooms');
-  var guestsFilter = mapFilters.querySelector('#housing-guests');
-  var featuresFilter = mapFilters.querySelector('#housing-features');
-
-  var onFilterSelect = function (mas) {
-
-    var sameTypeOffers = mas.filter(function (el) {
-      return el.offer.type === typeFilter.options[typeFilter.selectedIndex].text;
-    });
-
-    window.removePins(mas);
-    window.drawPins(sameTypeOffers);
-    // return sameTypeOffers;
-  };
-
-  console.log(window.offers);
-  typeFilter.addEventListener('change',
-  // function () {
-  //   console.log(1);
-  // }
-  onFilterSelect(window.offers)
-);
-
-
-
 
 })();

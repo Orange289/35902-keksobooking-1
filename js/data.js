@@ -2,21 +2,17 @@
 
 (function () {
   window.offers = [];
-
-
-  // var valuesOfFilters = {
-  //   typeFilter:
-  // };
-
-
-
-
+  window.offersFilters = [];
 
   var successHandler = function (offers) {
-    for (var i = 0; i < offers.length; i++) {
-      window.offers[i] = offers[i];
-    }
+    offers.forEach(function (el, index, array) {
+      if (index !== (array.length)) {
+        window.offers.push(el);
+        window.offersFilters.push(el);
+      }
+    });
   };
+
   window.backend.load(successHandler, window.backend.onError);
 
 })();

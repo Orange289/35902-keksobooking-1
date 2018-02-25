@@ -89,7 +89,11 @@
       window.util.map.removeChild(oldMapCard);
     }
 
-    window.fillDialog(clickedElement.dataset.index);
+    if (window.isFiltered) {
+      window.fillDialog(window.offersFiltersTotal, clickedElement.dataset.index);
+    } else {
+      window.fillDialog(window.offers, clickedElement.dataset.index);
+    }
 
     document.addEventListener('keydown', onEscPress);
   };
