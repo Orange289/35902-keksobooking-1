@@ -31,4 +31,38 @@
       window.util.mapPins.removeChild(pin[i]);
     }
   };
+
+
+  ////
+
+  var mapFilters = window.util.map.querySelector('.map__filters');
+  var filterSelects = mapFilters.querySelectorAll('select');
+  var typeFilter = mapFilters.querySelector('#housing-type');
+  var priceFilter = mapFilters.querySelector('#housing-price');
+  var roomsFilter = mapFilters.querySelector('#housing-rooms');
+  var guestsFilter = mapFilters.querySelector('#housing-guests');
+  var featuresFilter = mapFilters.querySelector('#housing-features');
+
+  var onFilterSelect = function (mas) {
+
+    var sameTypeOffers = mas.filter(function (el) {
+      return el.offer.type === typeFilter.options[typeFilter.selectedIndex].text;
+    });
+
+    window.removePins(mas);
+    window.drawPins(sameTypeOffers);
+    // return sameTypeOffers;
+  };
+
+  console.log(window.offers);
+  typeFilter.addEventListener('change',
+  // function () {
+  //   console.log(1);
+  // }
+  onFilterSelect(window.offers)
+);
+
+
+
+
 })();
