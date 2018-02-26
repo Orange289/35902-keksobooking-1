@@ -39,7 +39,7 @@
       });
     };
 
-    window.offersFilters = window.offersFilters
+    window.filteredArray = offersStart
         .filter(function (el) {
           return typeFilter.options[typeFilter.selectedIndex].value === 'any' ||
             el.offer.type === typeFilter.options[typeFilter.selectedIndex].value;
@@ -61,33 +61,17 @@
         });
 
 
-    var drawPinsFilter = function () {
-      window.drawPins(window.offersFilters);
+    var renderFilter = function () {
+      window.drawPins(window.filteredArray);
+
+      if (window.filteredArray.length) {
+        window.fillDialog(window.filteredArray, 0);
+      } else {
+        window.removeDialog();
+      }
     };
 
-    var fillDialogFilter = function () {
-      window.fillDialog(window.offersFilters, 0);
-    };
-
-    window.debounce(drawPinsFilter);
-
-    if (window.offersFilters.length) {
-      window.debounce(fillDialogFilter);
-    } else {
-      window.removeDialog();
-    }
-
-    // window.drawPins(window.offersFilters);
-
-    // if (window.offersFilters.length) {
-    //   window.debounce(window.fillDialog(window.offersFilters, 0));
-    // } else {
-    //   window.removeDialog();
-    // }
-
-    window.offersFiltersTotal = window.offersFilters.slice(0);
-
-    window.offersFilters = offersStart;
+    window.debounce(renderFilter);
 
   };
 

@@ -90,7 +90,7 @@
     }
 
     if (window.isFiltered) {
-      window.fillDialog(window.offersFiltersTotal, clickedElement.dataset.index);
+      window.fillDialog(window.filteredArray, clickedElement.dataset.index);
     } else {
       window.fillDialog(window.offers, clickedElement.dataset.index);
     }
