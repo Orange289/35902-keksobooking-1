@@ -69,7 +69,7 @@
     lodgeFeatures.innerHTML = '';
 
     for (var j = 0; j < mas[index].offer.features.length; j++) {
-      var feature = '<span class="feature__image feature__image--' + mas[index].offer.features[j] + '"></span>';
+      var feature = '<li class="feature feature--' + mas[index].offer.features[j] + '"></li>';
       lodgeFeatures.innerHTML += feature;
     }
 

@@ -8,8 +8,6 @@
   var featuresFilter = window.util.mapFilters.querySelector('#housing-features');
   var featuresItems = featuresFilter.querySelectorAll('input[type="checkbox"]');
 
-  console.log(window.offers);
-
   window.isFiltered = false;
 
   var onFilterChange = function () {
@@ -62,12 +60,30 @@
           return compareFeatures(el.offer.features);
         });
 
-    window.debounce(window.drawPins(window.offersFilters));
+
+    var drawPinsFilter = function () {
+      window.drawPins(window.offersFilters);
+    };
+
+    var fillDialogFilter = function () {
+      window.fillDialog(window.offersFilters, 0);
+    };
+
+    window.debounce(drawPinsFilter);
+
     if (window.offersFilters.length) {
-      window.debounce(window.fillDialog(window.offersFilters, 0));
+      window.debounce(fillDialogFilter);
     } else {
       window.removeDialog();
     }
+
+    // window.drawPins(window.offersFilters);
+
+    // if (window.offersFilters.length) {
+    //   window.debounce(window.fillDialog(window.offersFilters, 0));
+    // } else {
+    //   window.removeDialog();
+    // }
 
     window.offersFiltersTotal = window.offersFilters.slice(0);
 
