@@ -6,7 +6,20 @@
   window.START_PIN_HEIGHT = 62;
   var fragment = document.createDocumentFragment();
 
+  window.removePins = function () {
+    var pin = window.util.mapPins.querySelectorAll('.map__pin--similar');
+    var pinLength = pin.length;
+
+    for (var i = 0; i < pinLength; i++) {
+      window.util.mapPins.removeChild(pin[i]);
+    }
+  };
+
   window.drawPins = function (mas) {
+    window.removePins();
+
+    mas = mas.slice(0, 5);
+
     for (var i = 0; i < mas.length; i++) {
       var newPin = document.createElement('button');
       var elX = mas[i].location.x - window.PIN_WIDTH / 2;
@@ -24,11 +37,4 @@
     window.util.mapPins.appendChild(fragment);
   };
 
-  window.removePins = function (mas) {
-    var pin = window.util.mapPins.querySelectorAll('.map__pin--similar');
-
-    for (var i = 0; i < mas.length; i++) {
-      window.util.mapPins.removeChild(pin[i]);
-    }
-  };
 })();
