@@ -63,12 +63,7 @@
 
     var renderFilter = function () {
       window.drawPins(window.filteredArray);
-
-      if (window.filteredArray.length) {
-        window.fillDialog(window.filteredArray, 0);
-      } else {
-        window.removeDialog();
-      }
+      window.removeDialog();
     };
 
     window.debounce(renderFilter);
