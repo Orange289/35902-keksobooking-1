@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  window.pinMain = window.util.mapPins.querySelector('.map__pin--main');
 
   window.setFormAddress = function (el) {
     var x;
@@ -18,9 +17,9 @@
     window.nfAddress.value = x + ', ' + y;
   };
 
-  window.setFormAddress(window.pinMain);
+  window.setFormAddress(window.util.pinMain);
 
-  window.pinMain.addEventListener('mousedown', function (evt) {
+  window.util.pinMain.addEventListener('mousedown', function (evt) {
     var startCoords = {
       x: evt.pageX,
       y: evt.pageY
@@ -32,7 +31,7 @@
       var MAP_START_Y = 150 - window.PIN_HEIGHT;
       var MAP_END_Y = 500 - window.PIN_HEIGHT;
 
-      window.setFormAddress(window.pinMain);
+      window.setFormAddress(window.util.pinMain);
 
       var shift = {
         x: startCoords.x - moveEvt.pageX,
@@ -49,8 +48,8 @@
           y: moveEvt.pageY
         };
 
-        window.pinMain.style.top = (window.pinMain.offsetTop - shift.y) + 'px';
-        window.pinMain.style.left = (window.pinMain.offsetLeft - shift.x) + 'px';
+        window.util.pinMain.style.top = (window.util.pinMain.offsetTop - shift.y) + 'px';
+        window.util.pinMain.style.left = (window.util.pinMain.offsetLeft - shift.x) + 'px';
       }
 
     };
@@ -61,7 +60,7 @@
         window.setPageActive();
       }
 
-      window.setFormAddress(window.pinMain);
+      window.setFormAddress(window.util.pinMain);
       document.removeEventListener('mousemove', onPinMainMouseMove);
       document.removeEventListener('mouseup', onPinMainMouseUp);
       document.addEventListener('keydown', onEscPress);
@@ -101,7 +100,7 @@
   window.util.mapPins.addEventListener('click', onPinClick);
 
   var onEscPress = function (evt) {
-    if (evt.keyCode === window.util.KEY_ESC) {
+    if (evt.keyCode === window.util.KeyCodes.KEY_ESC) {
       closeDialog();
     }
   };
@@ -126,7 +125,7 @@
   window.util.map.addEventListener('keydown', function (evt) {
     var dialog = window.util.map.querySelector('.map__card');
 
-    if (evt.keykode === window.util.KEY_ENTER) {
+    if (evt.keykode === window.util.KeyCodes.KEY_ENTER) {
       window.util.map.removeChild(dialog);
       document.removeEventListener('keydown', onEscPress);
     }

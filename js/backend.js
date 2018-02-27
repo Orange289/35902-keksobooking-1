@@ -12,19 +12,19 @@
 
     xhr.addEventListener('load', function () {
       switch (xhr.status) {
-        case 200:
+        case window.util.StatusCodes.SUCCESS:
           success(xhr.response);
           break;
-        case 400:
+        case window.util.StatusCodes.WRONG_REQUEST:
           error('Неправильный запрос');
           break;
-        case 404:
+        case window.util.StatusCodes.NOT_FOUND:
           error('Запрашиваемый ресурс не найден');
           break;
-        case 301:
+        case window.util.StatusCodes.MOVED_PERMANENTLY:
           error('Ресурс переехал НАВСЕГДА');
           break;
-        case 307:
+        case window.util.StatusCodes.MOVED_TEMPORARY:
           error('Ресурс временно переехал');
           break;
         default:

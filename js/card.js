@@ -9,6 +9,12 @@
     }
   };
 
+  var checkEmptyData = function (el, block) {
+    if (el.length === 0 || el === '') {
+      block.remove();
+    }
+  };
+
   window.fillDialog = function (mas, index) {
     var template = document.querySelector('template').content.querySelector('.map__card').cloneNode(true);
 
@@ -26,7 +32,10 @@
     window.removeDialog();
 
     lodgeTitle.textContent = mas[index].offer.title;
+
+    checkEmptyData(mas[index].offer.address, lodgeAddress);
     lodgeAddress.textContent = mas[index].offer.address;
+
     lodgePrice.innerHTML = mas[index].offer.price + '&#x20bd;/ночь';
 
     switch (mas[index].offer.type) {
@@ -62,19 +71,27 @@
         roomsVal = ' комнаты для ';
     }
 
+    checkEmptyData(mas[index].offer.rooms, lodgeRoomsGuests);
+    checkEmptyData(mas[index].offer.guests, lodgeRoomsGuests);
+
     lodgeRoomsGuests.textContent = mas[index].offer.rooms + roomsVal + mas[index].offer.guests + guestsVal;
 
+    checkEmptyData(mas[index].offer.checkin, lodgeCheck);
+    checkEmptyData(mas[index].offer.checkout, lodgeCheck);
     lodgeCheck.textContent = 'Заезд после ' + mas[index].offer.checkin + ', выезд до ' + mas[index].offer.checkout + '';
 
     lodgeFeatures.innerHTML = '';
 
+    checkEmptyData(mas[index].offer.features, lodgeFeatures);
     for (var j = 0; j < mas[index].offer.features.length; j++) {
       var feature = '<li class="feature feature--' + mas[index].offer.features[j] + '"></li>';
       lodgeFeatures.innerHTML += feature;
     }
 
+    checkEmptyData(mas[index].offer.description, lodgeDescr);
     lodgeDescr.textContent = mas[index].offer.description;
 
+    checkEmptyData(mas[index].offer.photos, lodgePhotos);
     for (var n = 0; n < mas[index].offer.photos.length; n++) {
       var photo = lodgePhotos.children[0].cloneNode();
       photo.innerHTML = '<img src="' + mas[index].offer.photos[n] + '" width="40" height="40">';
@@ -84,6 +101,7 @@
     var lodgePhotosEls = lodgePhotos.querySelectorAll('li');
     lodgePhotos.removeChild(lodgePhotosEls[0]);
 
+    checkEmptyData(mas[index].author.avatar, lodgeAva);
     lodgeAva.setAttribute('src', mas[index].author.avatar);
 
     window.util.mapPins.insertAdjacentElement('afterend', template);

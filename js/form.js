@@ -2,7 +2,6 @@
 
 (function () {
   window.nfAddress = window.util.nf.elements.address;
-  window.nfFieldset = window.util.nf.querySelectorAll('fieldset');
   var nfTitle = window.util.nf.elements.title;
   var nfType = window.util.nf.elements.type;
   var nfPrice = window.util.nf.elements.price;
@@ -15,15 +14,16 @@
 
   // VALIDATION
 
+  window.nfAddress.style.cursor = 'default';
 
   nfReset.addEventListener('click', function () {
     window.util.map.classList.add('map--faded');
     window.resetPage();
-    window.setFormAddress(window.pinMain);
+    window.setFormAddress(window.util.pinMain);
     window.removePins();
     window.removeDialog();
 
-    window.pinMain.addEventListener('mouseup', window.onPinMainMouseup);
+    window.util.pinMain.addEventListener('mouseup', window.onPinMainMouseup);
   });
 
   var minPrice = [0, 1000, 5000, 10000];
@@ -124,7 +124,7 @@
   };
 
   var successHandler = function () {
-    window.util.nf.reset();
+    window.resetPage();
   };
 
   var onSubmitClick = function (evt) {
