@@ -11,9 +11,9 @@
 
     pinMain: document.querySelector('.map__pin--main'),
 
-    nf: document.querySelector('.notice__form'),
+    noticeForm: document.querySelector('.notice__form'),
 
-    nfFieldset: document.querySelectorAll('.notice__form fieldset'),
+    formFieldset: document.querySelectorAll('.notice__form fieldset'),
 
     KeyCodes: {
       KEY_ENTER: 13,
