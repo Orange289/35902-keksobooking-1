@@ -2,19 +2,19 @@
 
 (function () {
 
-  window.setFormAddress = function (el) {
+  window.setFormAddress = function (pinElement) {
     var x;
     var y;
 
     if (window.isPageActive) {
-      x = el.offsetLeft + window.PIN_WIDTH / 2;
-      y = el.offsetTop + window.PIN_HEIGHT;
+      x = pinElement.offsetLeft + window.PIN_WIDTH / 2;
+      y = pinElement.offsetTop + window.PIN_HEIGHT;
     } else {
-      x = el.offsetLeft + window.PIN_WIDTH / 2;
-      y = el.offsetTop + window.START_PIN_HEIGHT / 2;
+      x = pinElement.offsetLeft + window.PIN_WIDTH / 2;
+      y = pinElement.offsetTop + window.START_PIN_HEIGHT / 2;
     }
 
-    window.nfAddress.value = x + ', ' + y;
+    window.formAddress.value = x + ', ' + y;
   };
 
   window.setFormAddress(window.util.pinMain);

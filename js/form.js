@@ -1,22 +1,22 @@
 'use strict';
 
 (function () {
-  window.nfAddress = window.util.nf.elements.address;
-  var nfTitle = window.util.nf.elements.title;
-  var nfType = window.util.nf.elements.type;
-  var nfPrice = window.util.nf.elements.price;
-  var nfTimeIn = window.util.nf.elements.timein;
-  var nfTimeOut = window.util.nf.elements.timeout;
-  var nfRooms = window.util.nf.elements.room_number;
-  var nfCapacity = window.util.nf.elements.capacity;
-  var nfSubmitBtn = window.util.nf.querySelector('.form__submit');
-  var nfReset = window.util.nf.querySelector('.form__reset');
+  window.formAddress = window.util.noticeForm.elements.address;
+  var formTitle = window.util.noticeForm.elements.title;
+  var formType = window.util.noticeForm.elements.type;
+  var formPrice = window.util.noticeForm.elements.price;
+  var formTimeIn = window.util.noticeForm.elements.timein;
+  var formTimeOut = window.util.noticeForm.elements.timeout;
+  var formRooms = window.util.noticeForm.elements.room_number;
+  var formCapacity = window.util.noticeForm.elements.capacity;
+  var formSubmitBtn = window.util.noticeForm.querySelector('.form__submit');
+  var formReset = window.util.noticeForm.querySelector('.form__reset');
 
   // VALIDATION
 
-  window.nfAddress.style.cursor = 'default';
+  window.formAddress.style.cursor = 'default';
 
-  nfReset.addEventListener('click', function () {
+  formReset.addEventListener('click', function () {
     window.util.map.classList.add('map--faded');
     window.resetPage();
     window.setFormAddress(window.util.pinMain);
@@ -35,35 +35,35 @@
   };
 
   var getTimeOut = function () {
-    var timeSelIndex = nfTimeIn.selectedIndex;
-    nfTimeOut.selectedIndex = timeSelIndex;
+    var timeSelIndex = formTimeIn.selectedIndex;
+    formTimeOut.selectedIndex = timeSelIndex;
   };
 
   var getTimeIn = function () {
-    var timeSelIndex = nfTimeOut.selectedIndex;
-    nfTimeIn.selectedIndex = timeSelIndex;
+    var timeSelIndex = formTimeOut.selectedIndex;
+    formTimeIn.selectedIndex = timeSelIndex;
   };
 
-  nfTimeIn.onchange = getTimeOut;
-  nfTimeOut.onchange = getTimeIn;
+  formTimeIn.onchange = getTimeOut;
+  formTimeOut.onchange = getTimeIn;
 
   var getMinPrice = function () {
-    var typeSelIndex = nfType.selectedIndex;
-    nfPrice.setAttribute('min', minPrice[typeSelIndex]);
-    nfPrice.setAttribute('placeholder', minPrice[typeSelIndex]);
+    var typeSelIndex = formType.selectedIndex;
+    formPrice.setAttribute('min', minPrice[typeSelIndex]);
+    formPrice.setAttribute('placeholder', minPrice[typeSelIndex]);
   };
 
-  nfType.onchange = getMinPrice;
+  formType.onchange = getMinPrice;
 
   var getGuestsNumber = function () {
     for (var key in roomsGuests) {
-      if (nfRooms.value === key) {
-        nfCapacity.value = roomsGuests[key][0];
+      if (formRooms.value === key) {
+        formCapacity.value = roomsGuests[key][0];
 
-        for (var i = 0; i < nfCapacity.options.length; i++) {
-          nfCapacity.options[i].removeAttribute('disabled');
-          if (roomsGuests[key].indexOf(nfCapacity.options[i].value) === -1) {
-            nfCapacity.options[i].setAttribute('disabled', '');
+        for (var i = 0; i < formCapacity.options.length; i++) {
+          formCapacity.options[i].removeAttribute('disabled');
+          if (roomsGuests[key].indexOf(formCapacity.options[i].value) === -1) {
+            formCapacity.options[i].setAttribute('disabled', '');
           }
         }
 
@@ -73,14 +73,14 @@
 
   var getRoomsNumber = function () {
     for (var key in roomsGuests) {
-      if (roomsGuests[key].indexOf(nfCapacity.value) > -1) {
-        nfRooms.value = key;
+      if (roomsGuests[key].indexOf(formCapacity.value) > -1) {
+        formRooms.value = key;
       }
     }
   };
 
-  nfRooms.onchange = getGuestsNumber;
-  nfCapacity.onchange = getRoomsNumber;
+  formRooms.onchange = getGuestsNumber;
+  formCapacity.onchange = getRoomsNumber;
 
   var setInvalidBorder = function (el) {
     el.setAttribute('style', 'border: 2px solid red;');
@@ -92,33 +92,33 @@
 
   var setTitleValidation = function () {
 
-    if (nfTitle.validity.valueMissing) {
-      nfTitle.setCustomValidity('Не забудьте ввести название!');
-      setInvalidBorder(nfTitle);
-    } else if (nfTitle.validity.tooShort) {
-      nfTitle.setCustomValidity('Слишком короткое название, наберите хотя бы 30 символов!');
-      setInvalidBorder(nfTitle);
+    if (formTitle.validity.valueMissing) {
+      formTitle.setCustomValidity('Не забудьте ввести название!');
+      setInvalidBorder(formTitle);
+    } else if (formTitle.validity.tooShort) {
+      formTitle.setCustomValidity('Слишком короткое название, наберите хотя бы 30 символов!');
+      setInvalidBorder(formTitle);
     } else {
-      nfTitle.setCustomValidity('');
-      setNormalBorder(nfTitle);
+      formTitle.setCustomValidity('');
+      setNormalBorder(formTitle);
     }
 
   };
 
   var setPriceValidation = function () {
 
-    if (nfPrice.validity.valueMissing) {
-      nfPrice.setCustomValidity('Не забудьте ввести цену!');
-      setInvalidBorder(nfPrice);
-    } else if (nfPrice.validity.rangeUnderflow) {
-      nfPrice.setCustomValidity('Для этого типа жилья цена должна быть больше');
-      setInvalidBorder(nfPrice);
-    } else if (nfPrice.validity.rangeOverflow) {
-      nfPrice.setCustomValidity('Ну Вы размахнулись! Максимальная цена - всего лишь млн :)');
-      setInvalidBorder(nfPrice);
+    if (formPrice.validity.valueMissing) {
+      formPrice.setCustomValidity('Не забудьте ввести цену!');
+      setInvalidBorder(formPrice);
+    } else if (formPrice.validity.rangeUnderflow) {
+      formPrice.setCustomValidity('Для этого типа жилья цена должна быть больше');
+      setInvalidBorder(formPrice);
+    } else if (formPrice.validity.rangeOverflow) {
+      formPrice.setCustomValidity('Ну Вы размахнулись! Максимальная цена - всего лишь млн :)');
+      setInvalidBorder(formPrice);
     } else {
-      nfPrice.setCustomValidity('');
-      setNormalBorder(nfPrice);
+      formPrice.setCustomValidity('');
+      setNormalBorder(formPrice);
     }
 
   };
@@ -128,13 +128,13 @@
   };
 
   var onSubmitClick = function (evt) {
-    nfTitle.addEventListener('invalid', setTitleValidation());
-    nfPrice.addEventListener('invalid', setPriceValidation());
+    formTitle.addEventListener('invalid', setTitleValidation());
+    formPrice.addEventListener('invalid', setPriceValidation());
 
-    window.backend.upload(new FormData(window.nf), successHandler, window.backend.onError);
+    window.backend.upload(new FormData(window.util.noticeForm), successHandler, window.backend.onError);
     evt.preventDefault();
   };
 
-  nfSubmitBtn.addEventListener('click', onSubmitClick);
+  formSubmitBtn.addEventListener('click', onSubmitClick);
 
 })();
