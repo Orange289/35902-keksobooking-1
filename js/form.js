@@ -16,15 +16,17 @@
 
   window.formAddress.style.cursor = 'default';
 
-  formReset.addEventListener('click', function () {
+  var onResetClick = function () {
     window.util.map.classList.add('map--faded');
-    window.resetPage();
+    window.state.resetPage();
     window.setFormAddress(window.util.pinMain);
-    window.removePins();
+    window.pins.removePins();
     window.removeDialog();
 
     window.util.pinMain.addEventListener('mouseup', window.onPinMainMouseup);
-  });
+  };
+
+  formReset.addEventListener('click', onResetClick);
 
   var minPrice = [0, 1000, 5000, 10000];
   var roomsGuests = {
@@ -82,15 +84,18 @@
   formRooms.onchange = getGuestsNumber;
   formCapacity.onchange = getRoomsNumber;
 
-  var setInvalidBorder = function (el) {
-    el.setAttribute('style', 'border: 2px solid red;');
+  var setInvalidBorder = function (element) {
+    element.setAttribute('style', 'border: 2px solid red;');
   };
 
-  var setNormalBorder = function (el) {
-    el.setAttribute('style', 'border: 1px solid #d9d9d3;');
+  var setNormalBorder = function (element) {
+    element.setAttribute('style', 'border: 1px solid #d9d9d3;');
   };
 
-  var setTitleValidation = function () {
+  var isTitleValid = false;
+  var isPriceValid = false;
+
+  var onTitleValidate = function () {
 
     if (formTitle.validity.valueMissing) {
       formTitle.setCustomValidity('Не забудьте ввести название!');
@@ -99,13 +104,14 @@
       formTitle.setCustomValidity('Слишком короткое название, наберите хотя бы 30 символов!');
       setInvalidBorder(formTitle);
     } else {
+      isTitleValid = true;
       formTitle.setCustomValidity('');
       setNormalBorder(formTitle);
     }
 
   };
 
-  var setPriceValidation = function () {
+  var onPriceValidate = function () {
 
     if (formPrice.validity.valueMissing) {
       formPrice.setCustomValidity('Не забудьте ввести цену!');
@@ -117,6 +123,7 @@
       formPrice.setCustomValidity('Ну Вы размахнулись! Максимальная цена - всего лишь млн :)');
       setInvalidBorder(formPrice);
     } else {
+      isPriceValid = true;
       formPrice.setCustomValidity('');
       setNormalBorder(formPrice);
     }
@@ -124,15 +131,18 @@
   };
 
   var successHandler = function () {
-    window.resetPage();
+    window.state.resetPage();
   };
 
-  var onSubmitClick = function (evt) {
-    formTitle.addEventListener('invalid', setTitleValidation());
-    formPrice.addEventListener('invalid', setPriceValidation());
+  formTitle.addEventListener('invalid', onTitleValidate);
+  formPrice.addEventListener('invalid', onPriceValidate);
 
-    window.backend.upload(new FormData(window.util.noticeForm), successHandler, window.backend.onError);
-    evt.preventDefault();
+  var onSubmitClick = function () {
+
+    if (isTitleValid && isPriceValid) {
+      window.backend.upload(new FormData(window.util.noticeForm), successHandler, window.backend.onError);
+    }
+
   };
 
   formSubmitBtn.addEventListener('click', onSubmitClick);

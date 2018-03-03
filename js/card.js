@@ -9,8 +9,8 @@
     }
   };
 
-  var checkEmptyData = function (el, block) {
-    if (el.length === 0 || el === '') {
+  var checkEmptyData = function (element, block) {
+    if (element.length === 0 || element === '') {
       block.remove();
     }
   };
@@ -98,8 +98,8 @@
       lodgePhotos.appendChild(photo);
     }
 
-    var lodgePhotosEls = lodgePhotos.querySelectorAll('li');
-    lodgePhotos.removeChild(lodgePhotosEls[0]);
+    var lodgePhotosElements = lodgePhotos.querySelectorAll('li');
+    lodgePhotos.removeChild(lodgePhotosElements[0]);
 
     checkEmptyData(mas[index].author.avatar, lodgeAva);
     lodgeAva.setAttribute('src', mas[index].author.avatar);

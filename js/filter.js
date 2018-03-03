@@ -13,7 +13,7 @@
   var onFilterChange = function () {
 
     window.isFiltered = true;
-    var offersStart = window.offersFilters.slice(0);
+    var offersStart = window.data.offers.slice(0);
 
     var comparePrice = function (el, selectVal) {
       switch (selectVal) {
@@ -33,36 +33,36 @@
         featuresMas.push(featuresItems[i].value);
       }
     }
-    var compareFeatures = function (el) {
+    var compareFeatures = function (element) {
       return featuresMas.every(function (item) {
-        return el.includes(item);
+        return element.includes(item);
       });
     };
 
-    window.filteredArray = offersStart
-        .filter(function (el) {
+    window.offersFiltered = offersStart
+        .filter(function (element) {
           return typeFilter.options[typeFilter.selectedIndex].value === 'any' ||
-            el.offer.type === typeFilter.options[typeFilter.selectedIndex].value;
+            element.offer.type === typeFilter.options[typeFilter.selectedIndex].value;
         })
-        .filter(function (el) {
+        .filter(function (element) {
           return roomsFilter.options[roomsFilter.selectedIndex].value === 'any' ||
-            el.offer.rooms === Number(roomsFilter.options[roomsFilter.selectedIndex].value);
+            element.offer.rooms === Number(roomsFilter.options[roomsFilter.selectedIndex].value);
         })
-        .filter(function (el) {
+        .filter(function (element) {
           return guestsFilter.options[guestsFilter.selectedIndex].value === 'any' ||
-            el.offer.guests === Number(guestsFilter.options[guestsFilter.selectedIndex].value);
+            element.offer.guests === Number(guestsFilter.options[guestsFilter.selectedIndex].value);
         })
-        .filter(function (el) {
+        .filter(function (element) {
           return priceFilter.options[priceFilter.selectedIndex].value === 'any' ||
-            comparePrice(el.offer.price, priceFilter.options[priceFilter.selectedIndex].value);
+            comparePrice(element.offer.price, priceFilter.options[priceFilter.selectedIndex].value);
         })
-        .filter(function (el) {
-          return compareFeatures(el.offer.features);
+        .filter(function (element) {
+          return compareFeatures(element.offer.features);
         });
 
 
     var renderFilter = function () {
-      window.drawPins(window.filteredArray);
+      window.pins.drawPins(window.offersFiltered);
       window.removeDialog();
     };
 
