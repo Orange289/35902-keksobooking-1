@@ -124,6 +124,7 @@
 
   var successHandler = function () {
     window.state.resetPage();
+    window.pins.removePins();
   };
 
   var validate = function () {
