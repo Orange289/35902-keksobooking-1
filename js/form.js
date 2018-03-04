@@ -60,12 +60,12 @@
   var getGuestsNumber = function () {
     for (var key in roomsGuests) {
       if (formRooms.value === key) {
-        formCapacity.value = roomsGuests[key][0];
 
         for (var i = 0; i < formCapacity.options.length; i++) {
           formCapacity.options[i].removeAttribute('disabled');
           if (roomsGuests[key].indexOf(formCapacity.options[i].value) === -1) {
             formCapacity.options[i].setAttribute('disabled', '');
+            formCapacity.value = roomsGuests[key][0];
           }
         }
 
@@ -73,16 +73,8 @@
     }
   };
 
-  var getRoomsNumber = function () {
-    for (var key in roomsGuests) {
-      if (roomsGuests[key].indexOf(formCapacity.value) > -1) {
-        formRooms.value = key;
-      }
-    }
-  };
-
+  getGuestsNumber();
   formRooms.onchange = getGuestsNumber;
-  formCapacity.onchange = getRoomsNumber;
 
   var setInvalidBorder = function (element) {
     element.setAttribute('style', 'border: 2px solid red;');
@@ -96,7 +88,7 @@
   var isPriceValid = false;
 
   var onTitleValidate = function () {
-
+    isTitleValid = false;
     if (formTitle.validity.valueMissing) {
       formTitle.setCustomValidity('Не забудьте ввести название!');
       setInvalidBorder(formTitle);
@@ -112,7 +104,7 @@
   };
 
   var onPriceValidate = function () {
-
+    isPriceValid = false;
     if (formPrice.validity.valueMissing) {
       formPrice.setCustomValidity('Не забудьте ввести цену!');
       setInvalidBorder(formPrice);
@@ -134,11 +126,16 @@
     window.state.resetPage();
   };
 
+  var validate = function () {
+    onTitleValidate();
+    onPriceValidate();
+  };
+
   formTitle.addEventListener('invalid', onTitleValidate);
   formPrice.addEventListener('invalid', onPriceValidate);
 
   var onSubmitClick = function () {
-
+    validate();
     if (isTitleValid && isPriceValid) {
       window.backend.upload(new FormData(window.util.noticeForm), successHandler, window.backend.onError);
     }
