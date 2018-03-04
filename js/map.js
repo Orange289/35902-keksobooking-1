@@ -6,7 +6,7 @@
     var x;
     var y;
 
-    if (window.isPageActive) {
+    if (window.state.isPageActive) {
       x = pinElement.offsetLeft + window.PIN_WIDTH / 2;
       y = pinElement.offsetTop + window.PIN_HEIGHT;
     } else {
@@ -19,7 +19,7 @@
 
   window.setFormAddress(window.util.pinMain);
 
-  window.util.pinMain.addEventListener('mousedown', function (evt) {
+  var onPinMainMouseDown = function (evt) {
     var startCoords = {
       x: evt.pageX,
       y: evt.pageY
@@ -39,25 +39,27 @@
       };
 
       if ((moveEvt.pageX >= MAP_START_X)
-        && (moveEvt.pageX <= MAP_END_X)
-        && (moveEvt.pageY >= MAP_START_Y)
+        && (moveEvt.pageX <= MAP_END_X)) {
+
+        startCoords.x = moveEvt.pageX;
+
+        window.util.pinMain.style.left = (window.util.pinMain.offsetLeft - shift.x) + 'px';
+      }
+
+      if ((moveEvt.pageY >= MAP_START_Y)
         && (moveEvt.pageY <= MAP_END_Y)) {
 
-        startCoords = {
-          x: moveEvt.pageX,
-          y: moveEvt.pageY
-        };
+        startCoords.y = moveEvt.pageY;
 
         window.util.pinMain.style.top = (window.util.pinMain.offsetTop - shift.y) + 'px';
-        window.util.pinMain.style.left = (window.util.pinMain.offsetLeft - shift.x) + 'px';
       }
 
     };
 
     var onPinMainMouseUp = function () {
 
-      if (window.isPageActive === false) {
-        window.setPageActive();
+      if (window.state.isPageActive === false) {
+        window.state.setPageActive();
       }
 
       window.setFormAddress(window.util.pinMain);
@@ -68,8 +70,9 @@
 
     document.addEventListener('mousemove', onPinMainMouseMove);
     document.addEventListener('mouseup', onPinMainMouseUp);
+  };
 
-  });
+  window.util.pinMain.addEventListener('mousedown', onPinMainMouseDown);
 
   var onPinClick = function (evt) {
     var clickedElement = null;
@@ -89,9 +92,9 @@
     }
 
     if (window.isFiltered) {
-      window.fillDialog(window.filteredArray, clickedElement.dataset.index);
+      window.fillDialog(window.offersFiltered, clickedElement.dataset.index);
     } else {
-      window.fillDialog(window.offers, clickedElement.dataset.index);
+      window.fillDialog(window.data.offers, clickedElement.dataset.index);
     }
 
     document.addEventListener('keydown', onEscPress);
@@ -122,13 +125,15 @@
 
   window.util.map.addEventListener('click', closeDialogOnClick);
 
-  window.util.map.addEventListener('keydown', function (evt) {
+  var onMapKeyDown = function (evt) {
     var dialog = window.util.map.querySelector('.map__card');
 
     if (evt.keykode === window.util.KeyCodes.KEY_ENTER) {
       window.util.map.removeChild(dialog);
       document.removeEventListener('keydown', onEscPress);
     }
-  });
+  };
+
+  window.util.map.addEventListener('keydown', onMapKeyDown);
 
 })();

@@ -3,11 +3,11 @@
 (function () {
   var DEBOUNCE_TIME = 500;
 
-  var lastTimeOut;
+  var lastTimeout;
   window.debounce = function (action) {
-    if (lastTimeOut) {
-      window.clearTimeout(lastTimeOut);
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
     }
-    lastTimeOut = window.setTimeout(action, DEBOUNCE_TIME);
+    lastTimeout = window.setTimeout(action, DEBOUNCE_TIME);
   };
 })();

@@ -10,7 +10,7 @@
 
     xhr.open(type, url);
 
-    xhr.addEventListener('load', function () {
+    var onContentLoad = function () {
       switch (xhr.status) {
         case window.util.StatusCodes.SUCCESS:
           success(xhr.response);
@@ -30,17 +30,25 @@
         default:
           error('Неизвестная ошибка!');
       }
-    });
+    };
 
-    xhr.addEventListener('error', function () {
+    var onContentConnectionError = function () {
       error('Произошла ошибка соединения');
-    });
+    };
 
-    xhr.addEventListener('timeout', function () {
+    xhr.timeout = 10000;
+
+
+    var onContentTimeoutError = function () {
       error('Запрос не успел выполниться за ' + xhr.timeout + ' мс');
-    });
+    };
 
-    xhr.timeout = 1000;
+
+    xhr.addEventListener('load', onContentLoad);
+
+    xhr.addEventListener('error', onContentConnectionError);
+
+    xhr.addEventListener('timeout', onContentTimeoutError);
 
     xhr.send(data);
 

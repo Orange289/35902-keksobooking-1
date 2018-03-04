@@ -1,18 +1,14 @@
 'use strict';
 
 (function () {
-  window.offers = [];
-  window.offersFilters = [];
 
-  var successHandler = function (offers) {
-    offers.forEach(function (el, index, array) {
-      if (index !== (array.length)) {
-        window.offers.push(el);
-        window.offersFilters.push(el);
-      }
-    });
+  window.data = {
+
+    successHandler: function (offersLoaded) {
+      window.data.offers = offersLoaded.slice(0);
+      window.pins.drawPins(offersLoaded);
+    }
+
   };
-
-  window.backend.load(successHandler, window.backend.onError);
 
 })();

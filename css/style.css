@@ -136,6 +136,7 @@ textarea:focus
     font-size: 0;
 
     text-indent: -900em;
+
 }
 
 .features input:checked + label
