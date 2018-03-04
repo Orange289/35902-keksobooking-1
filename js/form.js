@@ -16,14 +16,18 @@
 
   window.formAddress.style.cursor = 'default';
 
-  var onResetClick = function () {
+  var resetPage = function () {
     window.util.map.classList.add('map--faded');
-    window.state.resetPage();
+    window.state.setPageInactive();
     window.setFormAddress(window.util.pinMain);
     window.pins.removePins();
     window.removeDialog();
 
     window.util.pinMain.addEventListener('mouseup', window.onPinMainMouseup);
+  };
+
+  var onResetClick = function () {
+    resetPage();
   };
 
   formReset.addEventListener('click', onResetClick);
@@ -123,8 +127,7 @@
   };
 
   var successHandler = function () {
-    window.state.resetPage();
-    window.pins.removePins();
+    resetPage();
   };
 
   var validate = function () {

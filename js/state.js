@@ -8,7 +8,7 @@
   window.state = {
     isPageActive: false,
 
-    resetPage: function () {
+    setPageInactive: function () {
       window.state.isPageActive = false;
       window.util.pinMain.style.left = (pinMainStartX) + 'px';
       window.util.pinMain.style.top = (pinMainStartY) + 'px';
@@ -40,6 +40,6 @@
 
   };
 
-  window.state.resetPage();
+  window.state.setPageInactive();
 
 })();
