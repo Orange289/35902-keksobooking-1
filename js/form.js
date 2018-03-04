@@ -134,10 +134,11 @@
   formTitle.addEventListener('invalid', onTitleValidate);
   formPrice.addEventListener('invalid', onPriceValidate);
 
-  var onSubmitClick = function () {
+  var onSubmitClick = function (evt) {
     validate();
     if (isTitleValid && isPriceValid) {
       window.backend.upload(new FormData(window.util.noticeForm), successHandler, window.backend.onError);
+      evt.preventDefault();
     }
 
   };
