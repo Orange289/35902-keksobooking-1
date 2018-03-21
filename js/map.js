@@ -28,8 +28,8 @@
     var onPinMainMouseMove = function (moveEvt) {
       var MAP_START_X = window.util.map.offsetLeft + window.PIN_WIDTH / 2;
       var MAP_END_X = window.util.map.offsetLeft + window.util.map.clientWidth - window.PIN_WIDTH / 2;
-      var MAP_START_Y = 150 - window.PIN_HEIGHT;
-      var MAP_END_Y = 500 - window.PIN_HEIGHT;
+      var MAP_START_Y = 200 - window.PIN_HEIGHT;
+      var MAP_END_Y = 600 - window.PIN_HEIGHT;
 
       window.setFormAddress(window.util.pinMain);
 

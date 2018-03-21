@@ -181,7 +181,7 @@
         <label class="feature feature--conditioner" for="feature-conditioner">Кондиционер</label>
       </fieldset>
 
-      <fieldset class="form__element form__element--wide">
+      <fieldset class="form__element form__element--wide" id="form_description">
         <label for="description">Описание (не обязательно)</label>
         <textarea id="description" name="description" placeholder="Здесь расскажите о том, какое ваше жилье замечательное и вообще"></textarea>
       </fieldset>
@@ -198,7 +198,10 @@
 
       <fieldset class="form__element form__element--submit">
         <button class="form__submit" type="submit">Опубликовать</button>
-        или <button class="form__reset" type="reset">очистить</button>
+        <div class="form__reset-container">
+          или
+          <button class="form__reset" type="reset">очистить</button>
+        </div>
       </fieldset>
     </form>
   </div>

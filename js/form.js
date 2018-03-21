@@ -149,4 +149,74 @@
 
   formSubmitBtn.addEventListener('click', onSubmitClick);
 
+  // Photos uploading
+
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var avaChooser = window.util.noticeForm.elements.avatar;
+  var avaPreview = window.util.noticeForm.querySelector('.notice__preview img');
+  var offersChooser = window.util.noticeForm.elements.images;
+  var offersContainer = window.util.noticeForm.querySelector('.form__photo-container');
+
+
+
+  var onImageChange = function (evt) {
+    var file;
+    var reader;
+    var fileName;
+    var fileNames = [];
+
+    switch (evt.target) {
+      case avaChooser:
+        file = avaChooser.files[0];
+        fileName = file.name.toLowerCase();
+        break;
+      case offersChooser:
+        var files = offersChooser.files;
+        for (var i = 0; i < files.length; i++) {
+          file = files[i];
+          fileName = file.name.toLowerCase();
+          fileNames.push(fileName);
+        }
+        break;
+    }
+
+
+    var matches = FILE_TYPES.some(function (element) {
+      return fileName.endsWith(element);
+    });
+
+    if (evt.target === avaChooser) {
+      if (matches) {
+        reader = new FileReader();
+
+        reader.addEventListener('load', function () {
+          avaPreview.src = reader.result;
+        });
+
+        reader.readAsDataURL(file);
+      }
+    } else if (evt.target === offersChooser) {
+      for (var j = 0; j < files.length; j++) {
+        if (matches) {
+          reader = new FileReader();
+
+          var offerPreviewDiv = document.createElement('img');
+          offerPreviewDiv.className = 'form__photo';
+
+          offersContainer.insertAdjacentElement('beforeend', offerPreviewDiv);
+          reader.addEventListener('load', function () {
+            offerPreviewDiv.src = reader.result;
+          });
+
+          reader.readAsDataURL(files[j]);
+
+        }
+      }
+    }
+
+  };
+
+  avaChooser.addEventListener('change', onImageChange);
+  offersChooser.addEventListener('change', onImageChange);
+
 })();
